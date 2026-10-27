@@ -69,6 +69,18 @@
             transform: translateY(-1px);
         }
 
+        .btn-emerald {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border: 1px solid #34d399;
+            color: #fff;
+            transition: all 0.2s ease;
+        }
+        .btn-emerald:hover:not(:disabled) {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+            transform: translateY(-1px);
+        }
+
         /* 檔位選鈕樣式 */
         .option-badge {
             transition: all 0.15s ease;
@@ -83,6 +95,20 @@
             border-color: #fbbf24;
             box-shadow: 0 0 12px rgba(245, 158, 11, 0.7);
             transform: scale(1.05);
+        }
+
+        .drag-badge {
+            transition: all 0.15s ease;
+            font-size: 0.75rem;
+            padding-top: 0.35rem;
+            padding-bottom: 0.35rem;
+        }
+        .drag-badge.active {
+            background: #10b981;
+            color: #06281e;
+            font-weight: 800;
+            border-color: #6ee7b7;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
         }
 
         input[type=range] {
@@ -118,7 +144,7 @@
 <body class="min-h-screen flex flex-col">
 
     <!-- START SCREEN 模式選擇入口畫面 (預設進入此畫面) -->
-    <div id="start-screen" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#090d18] bg-opacity-96 backdrop-blur-md px-4 py-8">
+    <div id="start-screen" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#090d18] bg-opacity-96 backdrop-blur-md px-4 py-8 overflow-y-auto">
         <div class="mb-4 text-center max-w-2xl">
             <span class="inline-block px-4 py-1.5 bg-amber-900/60 text-amber-300 border border-amber-600/50 rounded-full text-xs sm:text-sm font-semibold tracking-wider mb-3">國小科技資訊教育教案成果</span>
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-amber-400 tracking-wider mb-3">投石戰車模擬實驗室</h1>
@@ -127,18 +153,18 @@
             </p>
         </div>
 
-        <!-- 雙模式選擇大卡片 (只保留模式一與模式二) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl px-4 mt-4">
+        <!-- 三模式選擇大卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl px-4 mt-4">
             <!-- 模式一：自由練習 -->
-            <div class="wood-panel p-8 rounded-2xl flex flex-col items-center text-center cursor-pointer hover:border-amber-400 transition-all group hover:-translate-y-1.5 shadow-xl" onclick="startGame(1)">
-                <div class="w-16 h-16 rounded-full bg-amber-900/60 border-2 border-amber-500 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
+            <div class="wood-panel p-7 rounded-2xl flex flex-col items-center text-center cursor-pointer hover:border-amber-400 transition-all group hover:-translate-y-1.5 shadow-xl" onclick="startGame(1)">
+                <div class="w-15 h-15 w-16 h-16 rounded-full bg-amber-900/60 border-2 border-amber-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
                     <span class="text-3xl font-black text-amber-300">1</span>
                 </div>
-                <h2 class="text-xl sm:text-2xl font-black text-white mb-1.5 tracking-wide">模式一：自由練習模式</h2>
-                <div class="text-xs sm:text-sm text-amber-400 font-mono mb-3">PRACTICE / 參數自由探究</div>
+                <h2 class="text-xl font-black text-white mb-1.5 tracking-wide">模式一：自由練習模式</h2>
+                <div class="text-xs text-amber-400 font-mono mb-3">PRACTICE / 理想參數探究</div>
                 <p class="text-sm text-slate-300 mb-6 leading-relaxed flex-grow">
-                    自由切換 <strong>5 檔發射仰角</strong>、<strong>6 檔力臂長度</strong>、橡皮筋拉力與乒乓球/木球。<br>
-                    對應教案「活動二：數位兵工廠」，找出讓球飛最遠或飛最高的最佳組合！
+                    在無風阻理想環境下，自由切換 <strong>5 檔發射仰角</strong>、<strong>6 檔力臂長度</strong>、橡皮筋拉力與球體材質。<br>
+                    對應教案「活動二：數位兵工廠」，找出飛最遠或飛最高的組合！
                 </p>
                 <button class="w-full btn-wood py-3.5 rounded-xl text-sm sm:text-base font-bold tracking-widest uppercase">
                     進入自由練習
@@ -146,18 +172,34 @@
             </div>
             
             <!-- 模式二：精準打擊賽 -->
-            <div class="wood-panel p-8 rounded-2xl flex flex-col items-center text-center cursor-pointer hover:border-cyan-400 transition-all group hover:-translate-y-1.5 shadow-xl" onclick="startGame(2)">
-                <div class="w-16 h-16 rounded-full bg-cyan-900/60 border-2 border-cyan-400 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
+            <div class="wood-panel p-7 rounded-2xl flex flex-col items-center text-center cursor-pointer hover:border-cyan-400 transition-all group hover:-translate-y-1.5 shadow-xl" onclick="startGame(2)">
+                <div class="w-16 h-16 rounded-full bg-cyan-900/60 border-2 border-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
                     <span class="text-3xl font-black text-cyan-300">2</span>
                 </div>
-                <h2 class="text-xl sm:text-2xl font-black text-white mb-1.5 tracking-wide">模式二：精準打擊賽</h2>
-                <div class="text-xs sm:text-sm text-cyan-400 font-mono mb-3">TARGET CHALLENGE / 套環挑戰</div>
+                <h2 class="text-xl font-black text-white mb-1.5 tracking-wide">模式二：精準打擊賽</h2>
+                <div class="text-xs text-cyan-400 font-mono mb-3">TARGET CHALLENGE / 套環挑戰</div>
                 <p class="text-sm text-slate-300 mb-6 leading-relaxed flex-grow">
                     系統隨機指派特定目標靶區 (ZONE A~H)。<br>
                     對應教案「活動四：精準打擊挑戰賽」，運用控制變因法與數據圖表，調整最佳參數精準命中目標！
                 </p>
                 <button class="w-full btn-cyan py-3.5 rounded-xl text-sm sm:text-base font-bold tracking-widest uppercase">
                     開始目標挑戰
+                </button>
+            </div>
+
+            <!-- 模式三：空氣阻力實驗 -->
+            <div class="wood-panel p-7 rounded-2xl flex flex-col items-center text-center cursor-pointer hover:border-emerald-400 transition-all group hover:-translate-y-1.5 shadow-xl" onclick="startGame(3)">
+                <div class="w-16 h-16 rounded-full bg-emerald-900/60 border-2 border-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <span class="text-3xl font-black text-emerald-300">3</span>
+                </div>
+                <h2 class="text-xl font-black text-white mb-1.5 tracking-wide">模式三：空氣阻力實驗</h2>
+                <div class="text-xs text-emerald-400 font-mono mb-3">AIR DRAG REALISM / 真實彈道模擬</div>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed flex-grow">
+                    納入真實世界<strong>空氣阻力 ($F_d \propto v^2$)</strong> 與質量慣性效應。<br>
+                    同步對照「理想真空拋物線」與「真實風阻軌跡」，觀察輕質乒乓球與重質木球在現實中的抗風阻差異！
+                </p>
+                <button class="w-full btn-emerald py-3.5 rounded-xl text-sm sm:text-base font-bold tracking-widest uppercase">
+                    進入風阻實驗
                 </button>
             </div>
         </div>
@@ -219,6 +261,21 @@
                 <div class="wood-panel rounded-2xl overflow-hidden relative canvas-grid flex-grow min-h-[480px] lg:min-h-[560px]">
                     <canvas id="simCanvas" class="w-full h-full block absolute inset-0"></canvas>
                     
+                    <!-- 模式三專屬：畫布左上方空氣阻力對照圖例浮窗 -->
+                    <div id="canvas-drag-legend" class="hidden absolute top-4 left-4 bg-slate-900/95 border border-emerald-500/40 rounded-xl p-3 text-xs pointer-events-none shadow-lg">
+                        <div class="font-bold text-emerald-300 mb-1.5 flex items-center gap-1.5">
+                            <span>💨</span> 空氣阻力彈道對照 (F_d ∝ v²)
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300 mb-1">
+                            <span class="inline-block w-5 border-t-2 border-dashed border-amber-400/80"></span>
+                            <span>琥珀虛線：理想無風阻拋物線</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <span class="inline-block w-5 border-t-2 border-emerald-400"></span>
+                            <span>翠綠實線：真實空氣阻力彈道</span>
+                        </div>
+                    </div>
+
                     <!-- 畫布右上方實體圖提示浮窗 -->
                     <div class="absolute top-4 right-4 bg-slate-900/95 border border-amber-600/40 rounded-xl p-3 max-w-[220px] text-xs pointer-events-none hidden md:block shadow-lg">
                         <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5">
@@ -234,14 +291,14 @@
                 <div class="mt-2 text-xs sm:text-sm text-slate-400 flex flex-wrap items-center justify-between gap-2 px-1">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                        <span>黃插銷：半圓定位仰角 ｜ 綠箭頭：初速方向向量 ｜ 虛線：預覽軌跡</span>
+                        <span id="bottom-guide-text">黃插銷：半圓定位仰角 ｜ 綠箭頭：初速方向向量 ｜ 虛線：預覽軌跡</span>
                     </div>
-                    <div class="text-slate-500 font-mono">重力加速度 g = 9.8 m/s²</div>
+                    <div class="text-slate-500 font-mono" id="bottom-physics-formula">重力加速度 g = 9.8 m/s²</div>
                 </div>
             </section>
 
             <!-- 右側控制面板 -->
-            <aside class="w-full lg:w-[370px] shrink-0 flex flex-col gap-4">
+            <aside class="w-full lg:w-[380px] shrink-0 flex flex-col gap-4">
                 <div class="wood-panel rounded-2xl p-5 flex-grow flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between border-b border-amber-500/20 pb-3 mb-4">
@@ -251,14 +308,14 @@
                             <span class="text-xs text-amber-200/60 font-mono">CONTROLS</span>
                         </div>
 
-                        <!-- 鎖定目標選擇器 (模式一使用) -->
+                        <!-- 鎖定目標選擇器 (模式一、模式三可自由切換) -->
                         <div id="target-selector-container" class="mb-4">
                             <label class="text-xs sm:text-sm text-slate-300 font-medium block mb-1.5">目標靶區選擇 (Target Zone)</label>
                             <select id="input-target" class="w-full rounded-xl bg-slate-800/90 border border-amber-500/40 text-amber-300 p-2.5 text-sm font-mono focus:border-amber-400 focus:outline-none"></select>
                         </div>
 
                         <!-- 1. 角度調節：10, 30, 50, 70, 90 五種 -->
-                        <div class="mb-5">
+                        <div class="mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <label class="text-xs sm:text-sm text-slate-200 font-bold flex items-center gap-1.5">
                                     <span>📐</span> 發射仰角卡槽 (5檔)
@@ -275,7 +332,7 @@
                         </div>
 
                         <!-- 2. 長度調節：10, 12, 14, 16, 18, 20 cm 六種 -->
-                        <div class="mb-5">
+                        <div class="mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <label class="text-xs sm:text-sm text-slate-200 font-bold flex items-center gap-1.5">
                                     <span>📏</span> 力臂長度孔位 (6檔)
@@ -290,7 +347,7 @@
                                 <button type="button" class="option-badge rounded-lg border border-slate-600 bg-slate-800/80 text-slate-300 font-mono text-center hover:border-amber-400" data-val="18">18</button>
                                 <button type="button" class="option-badge rounded-lg border border-slate-600 bg-slate-800/80 text-slate-300 font-mono text-center hover:border-amber-400" data-val="20">20</button>
                             </div>
-                            <div class="text-xs text-slate-400 mt-1.5 flex justify-between">
+                            <div class="text-xs text-slate-400 mt-1 flex justify-between">
                                 <span>短臂 (10cm)</span>
                                 <span>單位: 公分 (2cm間隔)</span>
                                 <span>長臂 (20cm)</span>
@@ -298,7 +355,7 @@
                         </div>
 
                         <!-- 3. 橡皮筋充能拉力等級 -->
-                        <div class="mb-5">
+                        <div class="mb-4">
                             <div class="flex justify-between items-center mb-1.5">
                                 <label class="text-xs sm:text-sm text-slate-200 font-bold flex items-center gap-1.5">
                                     <span>⚡</span> 橡皮筋充能拉力
@@ -306,40 +363,58 @@
                                 <span class="text-sm font-bold text-amber-400 font-mono" id="val-tension">等級 3</span>
                             </div>
                             <input type="range" id="input-tension" min="1" max="5" step="1" value="3" class="w-full">
-                            <div class="flex justify-between text-xs text-slate-400 mt-1.5">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
                                 <span>單條微拉 (1)</span>
                                 <span>標準備戰 (3)</span>
                                 <span>雙條緊繃 (5)</span>
                             </div>
                         </div>
 
-                        <!-- 4. 拋射球材質 (依使用者要求：只保留「乒乓球」與「木球」兩種) -->
-                        <div class="mb-5">
+                        <!-- 4. 拋射球材質 (保留「乒乓球」與「木球」兩種) -->
+                        <div class="mb-4">
                             <label class="text-xs sm:text-sm text-slate-200 font-bold block mb-2">
                                 <span>🎾</span> 拋射物體材質（教案指定二分法）
                             </label>
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="mass" value="20" checked class="sr-only peer">
-                                    <div class="border border-slate-700 bg-slate-800/80 peer-checked:border-amber-400 peer-checked:bg-amber-500/25 peer-checked:text-amber-200 rounded-xl p-3 text-center transition-all shadow">
+                                    <div class="border border-slate-700 bg-slate-800/80 peer-checked:border-amber-400 peer-checked:bg-amber-500/25 peer-checked:text-amber-200 rounded-xl p-2.5 text-center transition-all shadow">
                                         <div class="text-sm font-bold">乒乓球</div>
-                                        <div class="text-xs text-slate-400 font-mono mt-1">20g (輕質物)</div>
+                                        <div class="text-xs text-slate-400 font-mono mt-0.5">20g (輕質/易受風阻)</div>
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="mass" value="50" class="sr-only peer">
-                                    <div class="border border-slate-700 bg-slate-800/80 peer-checked:border-amber-400 peer-checked:bg-amber-500/25 peer-checked:text-amber-200 rounded-xl p-3 text-center transition-all shadow">
+                                    <div class="border border-slate-700 bg-slate-800/80 peer-checked:border-amber-400 peer-checked:bg-amber-500/25 peer-checked:text-amber-200 rounded-xl p-2.5 text-center transition-all shadow">
                                         <div class="text-sm font-bold">木球</div>
-                                        <div class="text-xs text-slate-400 font-mono mt-1">50g (重質物)</div>
+                                        <div class="text-xs text-slate-400 font-mono mt-0.5">50g (重質/抗風阻強)</div>
                                     </div>
                                 </label>
+                            </div>
+                        </div>
+
+                        <!-- 5. 模式三專屬：空氣阻力強度控制面板 -->
+                        <div id="mode3-drag-panel" class="hidden mb-4 p-3 rounded-xl bg-emerald-950/35 border border-emerald-500/40">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs sm:text-sm text-emerald-300 font-bold flex items-center gap-1.5">
+                                    <span>💨</span> 空氣阻力環境係數
+                                </label>
+                                <span class="text-xs font-bold text-emerald-400 font-mono" id="val-drag-info">標準大氣 (1.0x)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-1.5" id="group-drag">
+                                <button type="button" class="drag-badge rounded-lg border border-slate-600 bg-slate-800/90 text-slate-300 font-mono text-center hover:border-emerald-400" data-drag="0.5">微風阻 0.5x</button>
+                                <button type="button" class="drag-badge rounded-lg border border-slate-600 bg-slate-800/90 text-slate-300 font-mono text-center hover:border-emerald-400 active" data-drag="1.0">標準大氣 1x</button>
+                                <button type="button" class="drag-badge rounded-lg border border-slate-600 bg-slate-800/90 text-slate-300 font-mono text-center hover:border-emerald-400" data-drag="1.8">強風阻 1.8x</button>
+                            </div>
+                            <div id="drag-ball-hint" class="text-[11px] text-emerald-200/80 mt-2 leading-snug">
+                                目前為<strong>乒乓球(20g)</strong>：質量輕、阻力減速效應極明顯，彈道末端將急速下墜。
                             </div>
                         </div>
                     </div>
 
                     <!-- 發射按鈕與數據結果 -->
                     <div>
-                        <button id="btn-launch" class="w-full btn-wood font-black py-3.5 rounded-xl tracking-wider text-base flex items-center justify-center gap-2 mb-3.5 shadow-lg">
+                        <button id="btn-launch" class="w-full btn-wood font-black py-3.5 rounded-xl tracking-wider text-base flex items-center justify-center gap-2 mb-3 shadow-lg">
                             <span>🚀</span> FIRE！釋放發射
                         </button>
 
@@ -361,6 +436,17 @@
                                 <div class="text-[10px] text-slate-400 font-mono">實測拋射距離</div>
                                 <div class="text-sm font-bold text-green-400 font-mono" id="res-dist">0.0 m</div>
                             </div>
+                            <!-- 模式三額外顯示：理想射程對照與風阻損耗 -->
+                            <div id="res-drag-row" class="hidden col-span-2 border border-emerald-800/60 bg-emerald-950/30 rounded-lg p-2 flex items-center justify-between">
+                                <div>
+                                    <div class="text-[10px] text-emerald-300/80 font-mono">無風阻理想距離</div>
+                                    <div class="text-xs font-bold text-amber-300 font-mono" id="res-ideal-dist">0.0 m</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-emerald-300/80 font-mono">空氣阻力射程衰減</div>
+                                    <div class="text-xs font-bold text-rose-400 font-mono" id="res-drag-loss">-0.0 m (0%)</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -370,7 +456,7 @@
 
     <!-- 自訂訊息彈窗 -->
     <div id="msgModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex flex-col items-center justify-center z-50 opacity-0 transition-opacity duration-300 p-4">
-        <div class="wood-panel max-w-sm w-full rounded-2xl p-6 transform scale-95 transition-transform duration-300 border-2" id="msgModalContent">
+        <div class="wood-panel max-w-md w-full rounded-2xl p-6 transform scale-95 transition-transform duration-300 border-2" id="msgModalContent">
             <h3 class="text-xl font-bold tracking-wider mb-2 text-center" id="msgTitle">測試反饋</h3>
             <p class="text-slate-200 text-sm mb-4 text-center leading-relaxed" id="msgText">訊息內容</p>
             <div id="msgScoreDetails" class="hidden text-xs sm:text-sm mb-5 bg-slate-900/80 p-3.5 rounded-xl border border-slate-700 leading-normal"></div>
@@ -410,6 +496,13 @@
             20: 2.25
         };
 
+        // 球體空氣阻力基礎衰減係數 (單位 1/m，反映球體截面積與質量慣性比 Cd*ρ*A / 2m)
+        // 乒乓球(20g)質輕易受空氣阻力減速；木球(50g)密度高、慣性大，受空氣阻力影響較小
+        const BASE_DRAG_COEFF = {
+            20: 0.042, // 乒乓球
+            50: 0.011  // 木球
+        };
+
         let gameState = {
             mode: 0, 
             launches: 0,
@@ -417,7 +510,8 @@
             isAnimating: false,
             swinging: false,
             swingProgress: 0,
-            animTime: 0
+            animTime: 0,
+            lastShotTrace: null // 儲存最近一次發射的完整軌跡供視覺對照
         };
 
         let physicsState = {
@@ -425,7 +519,8 @@
             arm: 1.5,
             angle: 50,
             tension: 3,
-            mass: 20, // 預設乒乓球 20g
+            mass: 20,       // 預設乒乓球 20g
+            dragMult: 1.0,  // 模式三空氣阻力倍率 (0.5x, 1.0x, 1.8x)
             target: 'C'
         };
 
@@ -438,7 +533,8 @@
             },
             groups: {
                 angleBtns: document.querySelectorAll('#group-angle button'),
-                armBtns: document.querySelectorAll('#group-arm button')
+                armBtns: document.querySelectorAll('#group-arm button'),
+                dragBtns: document.querySelectorAll('#group-drag button')
             },
             displays: {
                 modeBadge: document.getElementById('stat-mode-badge'),
@@ -450,13 +546,22 @@
                 angle: document.getElementById('val-angle'),
                 tension: document.getElementById('val-tension'),
                 dispArmCm: document.getElementById('disp-arm-cm'),
-                dispAngleDeg: document.getElementById('disp-angle-deg')
+                dispAngleDeg: document.getElementById('disp-angle-deg'),
+                mode3DragPanel: document.getElementById('mode3-drag-panel'),
+                valDragInfo: document.getElementById('val-drag-info'),
+                dragBallHint: document.getElementById('drag-ball-hint'),
+                canvasDragLegend: document.getElementById('canvas-drag-legend'),
+                bottomGuideText: document.getElementById('bottom-guide-text'),
+                bottomPhysicsFormula: document.getElementById('bottom-physics-formula')
             },
             results: {
                 v0: document.getElementById('res-v0'),
                 time: document.getElementById('res-time'),
                 height: document.getElementById('res-height'),
-                dist: document.getElementById('res-dist')
+                dist: document.getElementById('res-dist'),
+                dragRow: document.getElementById('res-drag-row'),
+                idealDist: document.getElementById('res-ideal-dist'),
+                dragLoss: document.getElementById('res-drag-loss')
             },
             btnLaunch: document.getElementById('btn-launch')
         };
@@ -478,6 +583,7 @@
                 UI.displays.dispAngleDeg.textContent = val + '°';
                 UI.groups.angleBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                gameState.lastShotTrace = null;
                 draw();
             });
         });
@@ -492,6 +598,21 @@
                 UI.displays.dispArmCm.textContent = cm + ' cm';
                 UI.groups.armBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                gameState.lastShotTrace = null;
+                draw();
+            });
+        });
+
+        // 模式三：空氣阻力倍率按鈕點擊
+        UI.groups.dragBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dVal = parseFloat(btn.getAttribute('data-drag'));
+                physicsState.dragMult = dVal;
+                const labelMap = { 0.5: '微風阻 (0.5x)', 1.0: '標準大氣 (1.0x)', 1.8: '強風阻 (1.8x)' };
+                UI.displays.valDragInfo.textContent = labelMap[dVal] || `${dVal}x`;
+                UI.groups.dragBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                gameState.lastShotTrace = null;
                 draw();
             });
         });
@@ -500,6 +621,7 @@
         UI.inputs.tension.addEventListener('input', (e) => {
             physicsState.tension = parseInt(e.target.value);
             UI.displays.tension.textContent = '等級 ' + physicsState.tension;
+            gameState.lastShotTrace = null;
             draw();
         });
 
@@ -510,15 +632,25 @@
             draw();
         });
 
-        // 球體材質單選 (只有乒乓球 20g 與 木球 50g)
+        // 球體材質單選 (乒乓球 20g 與 木球 50g)
         UI.inputs.masses.forEach(radio => {
             radio.addEventListener('change', (e) => {
                 if(e.target.checked) {
                     physicsState.mass = parseInt(e.target.value);
+                    updateDragBallHint();
+                    gameState.lastShotTrace = null;
                     draw();
                 }
             });
         });
+
+        function updateDragBallHint() {
+            if (physicsState.mass === 20) {
+                UI.displays.dragBallHint.innerHTML = '目前為<strong>乒乓球(20g)</strong>：質量輕、空氣阻力減速極明顯，彈道末端將急速下墜。';
+            } else {
+                UI.displays.dragBallHint.innerHTML = '目前為<strong>木球(50g)</strong>：質量較大、慣性高，能有效抵抗空氣阻力並維持拋物線動能。';
+            }
+        }
 
         UI.btnLaunch.addEventListener('click', launchProjectile);
 
@@ -576,6 +708,7 @@
         function backToMenu() {
             gameState.isAnimating = false;
             gameState.swinging = false;
+            gameState.lastShotTrace = null;
             UI.btnLaunch.disabled = false; 
             
             UI.screens.game.classList.add('hidden');
@@ -584,11 +717,12 @@
             gameState.mode = 0;
         }
 
-        // 開始遊戲 (依使用者點選進入)
+        // 開始遊戲 (依使用者點選模式 1, 2, 3 進入)
         function startGame(mode) {
             gameState.mode = mode;
             gameState.launches = 0;
             gameState.score = 0;
+            gameState.lastShotTrace = null;
             UI.displays.launches.textContent = '0';
             UI.displays.score.textContent = '0';
             
@@ -597,17 +731,49 @@
             UI.screens.game.classList.add('flex');
             
             UI.inputs.target.disabled = false;
+
+            // 重置結果顯示
+            UI.results.v0.textContent = '0.0 m/s';
+            UI.results.time.textContent = '0.00 s';
+            UI.results.height.textContent = '0.0 m';
+            UI.results.dist.textContent = '0.0 m';
+            UI.results.idealDist.textContent = '0.0 m';
+            UI.results.dragLoss.textContent = '-0.0 m (0%)';
             
             if (mode === 1) {
                 UI.displays.modeBadge.textContent = '模式一：自由練習';
-                UI.displays.instruction.innerHTML = '<span>🎯 模式一：可自由配置角度與臂長，試驗乒乓球與木球的拋射極限！</span>';
+                UI.displays.modeBadge.className = 'px-3 py-1 rounded text-xs sm:text-sm font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                UI.displays.instruction.innerHTML = '<span>🎯 模式一（理想無阻力）：自由配置角度與臂長，試驗乒乓球與木球的拋射極限！</span>';
+                UI.displays.mode3DragPanel.classList.add('hidden');
+                UI.results.dragRow.classList.add('hidden');
+                UI.displays.canvasDragLegend.classList.add('hidden');
+                UI.displays.bottomGuideText.textContent = '黃插銷：半圓定位仰角 ｜ 綠箭頭：初速方向向量 ｜ 虛線：預覽軌跡';
+                UI.displays.bottomPhysicsFormula.textContent = '理想真空拋體：g = 9.8 m/s² (無空氣阻力)';
                 physicsState.target = 'C';
                 UI.inputs.target.value = 'C';
             } else if (mode === 2) {
                 UI.displays.modeBadge.textContent = '模式二：精準打擊賽';
-                UI.displays.instruction.innerHTML = '<span>🎯 模式二：目標靶區已隨機指定！請微調長度與仰角命中目標！</span>';
+                UI.displays.modeBadge.className = 'px-3 py-1 rounded text-xs sm:text-sm font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+                UI.displays.instruction.innerHTML = '<span>🎯 模式二（隨機挑戰）：目標靶區已隨機指定！請微調長度與仰角命中目標！</span>';
+                UI.displays.mode3DragPanel.classList.add('hidden');
+                UI.results.dragRow.classList.add('hidden');
+                UI.displays.canvasDragLegend.classList.add('hidden');
+                UI.displays.bottomGuideText.textContent = '黃插銷：半圓定位仰角 ｜ 綠箭頭：初速方向向量 ｜ 虛線：預覽軌跡';
+                UI.displays.bottomPhysicsFormula.textContent = '理想真空拋體：g = 9.8 m/s² (無空氣阻力)';
                 UI.inputs.target.disabled = true;
                 assignRandomTarget();
+            } else if (mode === 3) {
+                UI.displays.modeBadge.textContent = '模式三：空氣阻力實驗';
+                UI.displays.modeBadge.className = 'px-3 py-1 rounded text-xs sm:text-sm font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                UI.displays.instruction.innerHTML = '<span>💨 模式三（真實空氣阻力）：比較「乒乓球」與「木球」在空氣阻力下的非對稱彈道與射程衰減！</span>';
+                UI.displays.mode3DragPanel.classList.remove('hidden');
+                UI.results.dragRow.classList.remove('hidden');
+                UI.displays.canvasDragLegend.classList.remove('hidden');
+                UI.displays.bottomGuideText.textContent = '琥珀虛線：理想無風阻拋物線 ｜ 翠綠實線：真實空氣阻力彈道';
+                UI.displays.bottomPhysicsFormula.textContent = '真實流體阻力：a = -g - (Cd·ρ·A/2m)·v·v⃗';
+                physicsState.target = 'C';
+                UI.inputs.target.value = 'C';
+                updateDragBallHint();
             }
 
             updateTargetUI();
@@ -653,14 +819,122 @@
             
             const baseEnergy = physicsState.tension * 430;
             const v0 = Math.sqrt(baseEnergy / physicsState.mass) * (1.1 + physicsState.arm * 0.45);
+
+            // 計算有效空氣阻力衰減係數 gamma (模式 1, 2 為 0；模式 3 依據球體質量與風阻倍率計算)
+            const gamma = (gameState.mode === 3) 
+                ? (BASE_DRAG_COEFF[physicsState.mass] || 0.02) * physicsState.dragMult 
+                : 0;
             
             return { 
                 groundY, pivotX, pivotY, armLenPx, 
                 loadedArmRad, releaseArmRad, currentArmRad, cupX, cupY,
-                releaseAngleRad, x0, y0, v0, 
+                releaseAngleRad, x0, y0, v0, gamma,
                 vx: v0 * Math.cos(releaseAngleRad), 
                 vy: v0 * Math.sin(releaseAngleRad) 
             };
+        }
+
+        // 數值積分計算完整彈道軌跡 (支援無阻力 gamma=0 與二階空氣阻力 gamma>0)
+        function computeTrajectory(vars, customGamma = null) {
+            const gamma = (customGamma !== null) ? customGamma : vars.gamma;
+            const yOffsetMeters = (vars.groundY - vars.y0) / PIXELS_PER_METER;
+            const xOffsetMeters = (vars.x0 - CANNON_BASE_X) / PIXELS_PER_METER;
+
+            // 若為無阻力理想狀態，使用解析解搭配時間採樣，確保與原版 100% 一致
+            if (gamma <= 0) {
+                const tTotal = (vars.vy + Math.sqrt(Math.max(0, vars.vy * vars.vy + 2 * GRAVITY * yOffsetMeters))) / GRAVITY;
+                const dMax = vars.vx * tTotal;
+                const hMax = (vars.vy * vars.vy) / (2 * GRAVITY) + yOffsetMeters;
+                const dMaxFromBase = dMax + xOffsetMeters;
+                const points = [];
+                const steps = 120;
+                for (let i = 0; i <= steps; i++) {
+                    const t = (tTotal * i) / steps;
+                    const px = vars.x0 + vars.vx * t * PIXELS_PER_METER;
+                    const py = vars.y0 - (vars.vy * t - 0.5 * GRAVITY * t * t) * PIXELS_PER_METER;
+                    points.push({ t, x: px, y: py });
+                }
+                const endSpeed = Math.sqrt(vars.vx * vars.vx + Math.pow(vars.vy - GRAVITY * tTotal, 2));
+                return { points, tTotal, hMax, dMaxFromBase, endSpeed };
+            }
+
+            // 模式三：考慮空氣阻力 F_d = -gamma * m * v * v⃗ (Runge-Kutta / 高精度細步長歐拉積分)
+            const dt = 0.002;
+            let t = 0;
+            let xm = 0; // 相對於發射點 x0 的水平公尺數
+            let ym = yOffsetMeters; // 相對於地面的高度公尺數
+            let vx = vars.vx;
+            let vy = vars.vy;
+            let hMax = ym;
+
+            const points = [{ t: 0, x: vars.x0, y: vars.y0 }];
+            let stepCount = 0;
+
+            while (ym >= 0 && t < 25) {
+                const prevXm = xm;
+                const prevYm = ym;
+                const prevT = t;
+
+                const speed = Math.sqrt(vx * vx + vy * vy);
+                const ax = -gamma * speed * vx;
+                const ay = -GRAVITY - gamma * speed * vy;
+
+                vx += ax * dt;
+                vy += ay * dt;
+                xm += vx * dt;
+                ym += vy * dt;
+                t += dt;
+
+                if (ym > hMax) hMax = ym;
+                stepCount++;
+
+                // 每 0.016 秒記錄一個軌跡點供繪圖
+                if (stepCount % 8 === 0 && ym >= 0) {
+                    points.push({
+                        t,
+                        x: vars.x0 + xm * PIXELS_PER_METER,
+                        y: vars.groundY - ym * PIXELS_PER_METER
+                    });
+                }
+
+                // 落地線性內插，確保落點精確停在地面 groundY
+                if (ym < 0) {
+                    const ratio = prevYm / (prevYm - ym);
+                    t = prevT + ratio * dt;
+                    xm = prevXm + ratio * (xm - prevXm);
+                    ym = 0;
+                    points.push({
+                        t,
+                        x: vars.x0 + xm * PIXELS_PER_METER,
+                        y: vars.groundY
+                    });
+                    break;
+                }
+            }
+
+            const dMaxFromBase = xm + xOffsetMeters;
+            const endSpeed = Math.sqrt(vx * vx + vy * vy);
+            return { points, tTotal: t, hMax, dMaxFromBase, endSpeed };
+        }
+
+        // 根據時間 t 從軌跡點陣列內插取得球體位置
+        function getPositionAtTime(traj, t) {
+            const pts = traj.points;
+            if (t <= 0 || pts.length === 0) return pts[0];
+            if (t >= traj.tTotal) return pts[pts.length - 1];
+
+            // 二分搜尋或線性查找對應區間
+            for (let i = 0; i < pts.length - 1; i++) {
+                if (t >= pts[i].t && t <= pts[i + 1].t) {
+                    const span = pts[i + 1].t - pts[i].t;
+                    const r = span > 0 ? (t - pts[i].t) / span : 0;
+                    return {
+                        x: pts[i].x + (pts[i + 1].x - pts[i].x) * r,
+                        y: pts[i].y + (pts[i + 1].y - pts[i].y) * r
+                    };
+                }
+            }
+            return pts[pts.length - 1];
         }
 
         // 繪製畫布（重現照片中雷切木製投石車外觀）
@@ -701,6 +975,11 @@
                 ctx.fillText(`${zone.start}-${zone.end}m`, pxStart + pxWidth/2, vars.groundY + 44);
                 ctx.font = "bold 13px 'Share Tech Mono', sans-serif";
             });
+
+            // 若在模式三且已有上一次發射紀錄，繪製上一次的「理想 vs 真實風阻」完整對照軌跡
+            if (!gameState.isAnimating && gameState.mode === 3 && gameState.lastShotTrace) {
+                drawComparisonTrajectories(gameState.lastShotTrace.idealTraj, gameState.lastShotTrace.actualTraj, 1.0);
+            }
 
             const pivotX = vars.pivotX;
             const pivotY = vars.pivotY;
@@ -895,9 +1174,11 @@
             ctx.restore();
         }
 
-        // 預覽軌跡
+        // 預覽前段軌跡 (模式三同時顯示無風阻與風阻前段預覽)
         function drawPreviewTrajectory(vars) {
             ctx.save();
+
+            // 理想無阻力預覽虛線
             ctx.beginPath();
             ctx.setLineDash([4, 6]);
             ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
@@ -906,13 +1187,78 @@
             let t = 0;
             ctx.moveTo(vars.x0, vars.y0);
             while(t < 0.45) { 
-                t += 0.04;
+                t += 0.03;
                 const x = vars.x0 + vars.vx * t * PIXELS_PER_METER;
                 const y = vars.y0 - (vars.vy * t - 0.5 * GRAVITY * t * t) * PIXELS_PER_METER;
                 if (y > vars.groundY) break;
                 ctx.lineTo(x, y);
             }
             ctx.stroke();
+
+            // 模式三：額外繪製前段風阻預覽線 (翠綠色虛線)
+            if (gameState.mode === 3) {
+                const dragTraj = computeTrajectory(vars, vars.gamma);
+                ctx.beginPath();
+                ctx.setLineDash([3, 4]);
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.85)';
+                ctx.lineWidth = 2.2;
+                ctx.moveTo(vars.x0, vars.y0);
+                for (let pt of dragTraj.points) {
+                    if (pt.t > 0.48) break;
+                    ctx.lineTo(pt.x, pt.y);
+                }
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        // 模式三：繪製「理想無風阻拋物線」與「真實空氣阻力彈道」對照圖
+        function drawComparisonTrajectories(idealTraj, actualTraj, progressRatio = 1.0) {
+            ctx.save();
+
+            // 1. 繪製完整的理想無風阻拋物線 (琥珀色細虛線)
+            ctx.beginPath();
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.42)';
+            ctx.lineWidth = 1.8;
+            idealTraj.points.forEach((pt, idx) => {
+                if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+            });
+            ctx.stroke();
+
+            // 2. 繪製真實空氣阻力軌跡 (翠綠色實線，隨飛行進度推進)
+            ctx.beginPath();
+            ctx.setLineDash([]);
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.85)';
+            ctx.lineWidth = 2.8;
+            const maxIdx = Math.floor((actualTraj.points.length - 1) * progressRatio);
+            for (let i = 0; i <= maxIdx; i++) {
+                const pt = actualTraj.points[i];
+                if (i === 0) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+            }
+            ctx.stroke();
+
+            // 若飛行已完成，標示兩個落點位置方便學生讀數比較
+            if (progressRatio >= 1.0) {
+                const idealEnd = idealTraj.points[idealTraj.points.length - 1];
+                const actualEnd = actualTraj.points[actualTraj.points.length - 1];
+
+                // 理想落點標記
+                ctx.beginPath();
+                ctx.arc(idealEnd.x, idealEnd.y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(245, 158, 11, 0.7)';
+                ctx.fill();
+
+                // 實際風阻落點標記
+                ctx.beginPath();
+                ctx.arc(actualEnd.x, actualEnd.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#10b981';
+                ctx.fill();
+            }
+
             ctx.restore();
         }
 
@@ -928,16 +1274,21 @@
             UI.btnLaunch.disabled = true;
 
             const vars = getPhysicsVars();
-            const yOffset = (vars.groundY - vars.y0) / PIXELS_PER_METER; 
-            const tTotal = (vars.vy + Math.sqrt(Math.max(0, vars.vy*vars.vy + 2*GRAVITY*yOffset))) / GRAVITY;
-            const dMax = vars.vx * tTotal;
-            const hMax = (vars.vy * vars.vy) / (2 * GRAVITY) + yOffset;
-            const dMaxFromBase = dMax + (vars.x0 - CANNON_BASE_X) / PIXELS_PER_METER;
+            // 計算理想無阻力軌跡與實際軌跡 (模式 1, 2 兩者相同；模式 3 實際軌跡含空氣阻力)
+            const idealTraj = computeTrajectory(vars, 0);
+            const actualTraj = (gameState.mode === 3) ? computeTrajectory(vars, vars.gamma) : idealTraj;
 
             UI.results.v0.textContent = vars.v0.toFixed(1) + ' m/s';
-            UI.results.time.textContent = tTotal.toFixed(2) + ' s';
-            UI.results.height.textContent = hMax.toFixed(1) + ' m';
-            UI.results.dist.textContent = dMaxFromBase.toFixed(1) + ' m';
+            UI.results.time.textContent = actualTraj.tTotal.toFixed(2) + ' s';
+            UI.results.height.textContent = actualTraj.hMax.toFixed(1) + ' m';
+            UI.results.dist.textContent = actualTraj.dMaxFromBase.toFixed(1) + ' m';
+
+            if (gameState.mode === 3) {
+                const lossMeters = Math.max(0, idealTraj.dMaxFromBase - actualTraj.dMaxFromBase);
+                const lossPct = idealTraj.dMaxFromBase > 0 ? (lossMeters / idealTraj.dMaxFromBase) * 100 : 0;
+                UI.results.idealDist.textContent = idealTraj.dMaxFromBase.toFixed(1) + ' m';
+                UI.results.dragLoss.textContent = `-${lossMeters.toFixed(1)} m (-${lossPct.toFixed(0)}%)`;
+            }
 
             // 階段一：甩動動畫
             function swingLoop() {
@@ -957,35 +1308,46 @@
                 requestAnimationFrame(swingLoop);
             }
 
-            // 階段二：拋物線飛行動畫
+            // 階段二：拋物線/風阻彈道飛行動畫
             function flightLoop() {
                 if(!gameState.isAnimating) return; 
 
-                gameState.animTime += 0.035; 
-                const x = vars.x0 + vars.vx * gameState.animTime * PIXELS_PER_METER;
-                const y = vars.y0 - (vars.vy * gameState.animTime - 0.5 * GRAVITY * gameState.animTime * gameState.animTime) * PIXELS_PER_METER;
+                gameState.animTime += 0.032; 
+                const pos = getPositionAtTime(actualTraj, gameState.animTime);
+                const progress = Math.min(1, gameState.animTime / actualTraj.tTotal);
                 
                 draw();
-                drawBall(x, y);
 
-                ctx.strokeStyle = 'rgba(245, 158, 11, 0.45)';
-                ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                const pT = Math.max(0, gameState.animTime - 0.08);
-                const pX = vars.x0 + vars.vx * pT * PIXELS_PER_METER;
-                const pY = vars.y0 - (vars.vy * pT - 0.5 * GRAVITY * pT * pT) * PIXELS_PER_METER;
-                ctx.lineTo(pX, pY);
-                ctx.stroke();
+                if (gameState.mode === 3) {
+                    // 模式三：即時繪製理想拋物線與真實風阻軌跡對照
+                    drawComparisonTrajectories(idealTraj, actualTraj, progress);
+                } else {
+                    // 模式一、二：繪製動態尾跡
+                    const prevPos = getPositionAtTime(actualTraj, Math.max(0, gameState.animTime - 0.08));
+                    ctx.strokeStyle = 'rgba(245, 158, 11, 0.45)';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(pos.x, pos.y);
+                    ctx.lineTo(prevPos.x, prevPos.y);
+                    ctx.stroke();
+                }
 
-                if (y >= vars.groundY) {
+                drawBall(pos.x, pos.y);
+
+                if (gameState.animTime >= actualTraj.tTotal) {
                     gameState.isAnimating = false;
                     UI.btnLaunch.disabled = false;
-                    evaluateHit(dMaxFromBase);
+                    if (gameState.mode === 3) {
+                        gameState.lastShotTrace = { idealTraj, actualTraj };
+                    }
+                    evaluateHit(actualTraj.dMaxFromBase, idealTraj, actualTraj, vars.v0);
                     draw(); 
-                } else if (x > canvas.width + 60) {
+                } else if (pos.x > canvas.width + 60) {
                     gameState.isAnimating = false;
                     UI.btnLaunch.disabled = false;
+                    if (gameState.mode === 3) {
+                        gameState.lastShotTrace = { idealTraj, actualTraj };
+                    }
                     showMessage("超出射程邊界", "球體拋射超出目前場地觀測範圍！", "error");
                     draw();
                 } else {
@@ -997,7 +1359,7 @@
         }
 
         // 命中結算
-        function evaluateHit(distMeters) {
+        function evaluateHit(distMeters, idealTraj, actualTraj, v0) {
             let hitZone = null;
             for (let key of ZONE_KEYS) {
                 if (distMeters >= ZONES[key].start && distMeters <= ZONES[key].end) {
@@ -1008,18 +1370,40 @@
 
             const targetKey = physicsState.target;
             const isHit = (hitZone === targetKey);
+            const ballName = physicsState.mass === 20 ? '乒乓球' : '木球';
+
+            // 模式三專屬物理分析報告區塊
+            let dragReportHTML = '';
+            if (gameState.mode === 3 && idealTraj && actualTraj) {
+                const lossMeters = Math.max(0, idealTraj.dMaxFromBase - actualTraj.dMaxFromBase);
+                const lossPct = idealTraj.dMaxFromBase > 0 ? (lossMeters / idealTraj.dMaxFromBase) * 100 : 0;
+                dragReportHTML = `
+                    <div class="mt-2.5 pt-2.5 border-t border-slate-700 text-xs text-slate-300 space-y-1">
+                        <div class="text-emerald-400 font-bold">💨 空氣阻力實驗分析報告：</div>
+                        <div>• 理想無風阻距離：<span class="font-mono text-amber-300">${idealTraj.dMaxFromBase.toFixed(1)} m</span> (高度 ${idealTraj.hMax.toFixed(1)} m)</div>
+                        <div>• 真實風阻實測距離：<span class="font-mono text-emerald-300">${actualTraj.dMaxFromBase.toFixed(1)} m</span> (高度 ${actualTraj.hMax.toFixed(1)} m)</div>
+                        <div>• 風阻射程衰減：<span class="font-mono text-rose-400 font-bold">-${lossMeters.toFixed(1)} m (-${lossPct.toFixed(1)}%)</span></div>
+                        <div>• 拋出初速 → 落地終速：<span class="font-mono">${v0.toFixed(1)} m/s → ${actualTraj.endSpeed.toFixed(1)} m/s</span></div>
+                    </div>
+                `;
+            }
             
             if (!isHit) {
-                showMessage("未命中目標！", `發射落點約在 <strong>${distMeters.toFixed(1)} 公尺</strong>（${hitZone ? 'ZONE ' + hitZone : '靶區外'}），未能落入指定的 <strong>ZONE ${targetKey}</strong>。請微調臂長或仰角！`, "error");
+                showMessage(
+                    "未命中目標！", 
+                    `發射落點約在 <strong>${distMeters.toFixed(1)} 公尺</strong>（${hitZone ? 'ZONE ' + hitZone : '靶區外'}），未能落入指定的 <strong>ZONE ${targetKey}</strong>。請微調臂長或仰角！`, 
+                    "error",
+                    dragReportHTML
+                );
                 return;
             }
 
             let ptsEarned = ZONES[targetKey].pts;
-            let ballName = physicsState.mass === 20 ? '乒乓球' : '木球';
             let detailHTML = `
                 <div class="text-green-400 font-bold mb-1">🎯 命中目標 ZONE ${targetKey}（${ZONES[targetKey].start}~${ZONES[targetKey].end}m）！</div>
                 <div>使用材質：${ballName} (${physicsState.mass}g)</div>
                 <div class="text-amber-400 font-bold mt-1">基礎得分：+${ptsEarned} 分</div>
+                ${dragReportHTML}
             `;
 
             gameState.score += ptsEarned;
@@ -1027,7 +1411,7 @@
             showMessage("🎉 恭喜命中！", `成功將球體拋入指定區域！`, "success", detailHTML);
         }
 
-        // 初始載入時：維持在 start-screen 模式選擇入口！(不主動呼叫 startGame)
+        // 初始載入時：維持在 start-screen 模式選擇入口！
     </script>
 </body>
 </html>
